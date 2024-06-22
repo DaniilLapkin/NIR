@@ -1,5 +1,3 @@
-Файл main.py:
-
 import numpy as np
 
 class Risk:
