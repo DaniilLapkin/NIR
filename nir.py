@@ -1,74 +1,166 @@
-import numpy as np
+import requests
+from bs4 import BeautifulSoup
 
-class Risk:
-    def __init__(self, name, description, probability, impact, business_type):
-        self.name = name
-        self.description = description
-        self.probability = probability
-        self.impact = impact
-        self.business_type = business_type
-        self.priority = self.calculate_priority()
-        
-    def calculate_priority(self):
-        weight_prob, weight_impact = self.get_weights()
-        priority = self.probability * weight_prob + self.impact * weight_impact
-        return priority
-    
-    def get_weights(self):
-        if self.business_type == 'banking':
-            return 0.6, 0.4
-        elif self.business_type == 'retail':
-            return 0.5, 0.5
-        elif self.business_type == 'it':
-            return 0.4, 0.6
+class RiskAssessmentTool:
+    def __init__(self, industry):
+        self.industry = industry
+        self.risk_info = {}
+
+    def get_industry_risks(self):
+        if self.industry.lower() == "it":
+            self.risk_info = {
+                "risks": [
+                    "Data Breaches",
+                    "Phishing Attacks",
+                    "Malware",
+                    "Insider Threats",
+                    "Denial of Service (DoS)",
+                    "Advanced Persistent Threats (APT)"
+                ],
+                "resources": {
+                    "MITRE ATT&CK": "https://attack.mitre.org/matrices/enterprise/",
+                    "OWASP Top 10": "https://owasp.org/www-project-top-ten/",
+          "NIST ":"https://www.nist.gov/cyberframework"
+                },
+                "top_vulnerabilities": [
+                    "Injection",
+                    "Broken Authentication",
+                    "Sensitive Data Exposure",
+                    "XML External Entities (XXE)",
+                    "Broken Access Control",
+                    "Security Misconfiguration",
+                    "Cross-Site Scripting (XSS)",
+                    "Insecure Deserialization",
+                    "Using Components with Known Vulnerabilities",
+                    "Insufficient Logging & Monitoring"
+                ]
+            }
+        elif self.industry.lower() == "banking":
+            self.risk_info = {
+                "risks": [
+                    "Fraud",
+                    "Data Breaches",
+                    "Phishing Attacks",
+                    "Malware",
+                    "Insider Threats",
+                    "Denial of Service (DoS)"
+                ],
+                "resources": {
+                    "FFIEC IT Examination Handbook": "https://ithandbook.ffiec.gov/",
+                    "PCI DSS": "https://www.pcisecuritystandards.org/",
+                    "NIST": "https://www.nist.gov/cyberframework"
+                },
+                "top_vulnerabilities": [
+                    "SQL Injection",
+                    "Cross-Site Scripting (XSS)",
+                    "Insecure Deserialization",
+                    "Broken Authentication",
+                    "Sensitive Data Exposure",
+                    "Broken Access Control",
+                    "Security Misconfiguration",
+                    "XML External Entities (XXE)",
+                    "Using Components with Known Vulnerabilities",
+                    "Insufficient Logging & Monitoring"
+                ]
+            }
+        elif self.industry.lower() == "retail":
+            self.risk_info = {
+                "risks": [
+                    "Point of Sale (POS) Intrusions",
+                    "E-commerce Attacks",
+                    "Supply Chain Disruptions",
+                    "Insider Threats",
+                    "Physical Security Risks",
+                    "Phishing Attacks"
+                ],
+                "resources": {
+                    "PCI DSS": "https://www.pcisecuritystandards.org/",
+                    "NIST": "https://www.nist.gov/cyberframework",
+                    "Retail Cyber Intelligence Sharing Center": "https://r-cisc.org/"
+                },
+                "top_vulnerabilities": [
+                    "Phishing",
+                    "Ransomware",
+                    "POS Malware",
+                    "SQL Injection",
+                    "Cross-Site Scripting (XSS)",
+                    "Man-in-the-Middle Attacks",
+                    "Unpatched Software",
+                    "Insecure Third-Party Services",
+                    "Insider Threats",
+                    "Weak Passwords"
+                ]
+            }
         else:
-            return 0.5, 0.5
+            print("Industry not supported yet.")
 
-class RiskAssessment:
-    def __init__(self):
-        self.risks = []
+    def display_risk_info(self):
+        if not self.risk_info:
+            print(f"No risk information available for industry: {self.industry}")
+            return
 
-    def add_risk(self, risk):
-        self.risks.append(risk)
+        print(f"Risk information for {self.industry} industry:")
+        print("\nPotential Risks:")
+        for risk in self.risk_info["risks"]:
+            print(f"- {risk}")
+
+        print("\nTop Vulnerabilities:")
+        for vulnerability in self.risk_info["top_vulnerabilities"]:
+            print(f"- {vulnerability}")
+
+        print("\nResources for further information and risk assessment:")
+        for resource_name, resource_link in self.risk_info["resources"].items():
+            print(f"{resource_name}: {resource_link}")
+
+    def identify_risks(self):
+        print("Identifying risks...")
+        self.identified_risks = {risk: "Identified" for risk in self.risk_info["risks"]}
+        for risk, status in self.identified_risks.items():
+            print(f"{risk}: {status}")
+
+    def analyze_risks(self):
+        print("Analyzing risks...")
+        self.analyzed_risks = {risk: f"Analyzed: {risk}" for risk in self.identified_risks}
+        for risk, analysis in self.analyzed_risks.items():
+            print(f"{risk}: {analysis}")
 
     def evaluate_risks(self):
-        for risk in self.risks:
-            risk.priority = risk.calculate_priority()
+        print("Evaluating risks...")
+        self.evaluated_risks = {risk: f"Evaluation result: {risk}" for risk in self.analyzed_risks}
+        for risk, evaluation in self.evaluated_risks.items():
+            print(f"{risk}: {evaluation}")
 
-    def get_risks_report(self):
-        report = []
-        for risk in self.risks:
-            report.append({
-                'name': risk.name,
-                'description': risk.description,
-                'probability': risk.probability,
-                'impact': risk.impact,
-                'priority': risk.priority,
-                'business_type': risk.business_type
-            })
-        return report
+    def develop_risk_management_strategy(self):
+        print("Developing risk management strategies...")
+        self.risk_management_strategies = {risk: f"Strategy for {risk}" for risk in self.evaluated_risks}
+        for risk, strategy in self.risk_management_strategies.items():
+            print(f"{risk}: {strategy}")
 
-# Пример использования системы для оценки рисков
+    def implement_and_control(self):
+        print("Implementing and controlling risk management measures...")
+        for risk, strategy in self.risk_management_strategies.items():
+            print(f"Implementing strategy for {risk}: {strategy}")
+            print(f"Controlling measures for {risk}...")
+
+    def train_and_communicate(self):
+        print("Training employees and communicating risk management information...")
+        print("Training program initiated...")
+        print("Communication plan initiated...")
+
+    def continuous_improvement(self):
+        print("Continuously improving risk management methodology...")
+        print("Improvement methods applied...")
+
 if __name__ == "__main__":
-    assessment = RiskAssessment()
-    
-    risk1 = Risk('Data Breach', 'Potential data breach affecting customer data', 0.7, 0.9, 'banking')
-    risk2 = Risk('Supply Chain Disruption', 'Disruption in supply chain affecting product availability', 0.5, 0.7, 'retail')
-    risk3 = Risk('Software Bug', 'Critical bug in software affecting operations', 0.8, 0.6, 'it')
-    
-    assessment.add_risk(risk1)
-    assessment.add_risk(risk2)
-    assessment.add_risk(risk3)
-    
-    assessment.evaluate_risks()
+    industry = input("Enter the industry (e.g., IT, Banking, Retail): ")
+    risk_tool = RiskAssessmentTool(industry)
+    risk_tool.get_industry_risks()
+    risk_tool.display_risk_info()
 
-    risks_report = assessment.get_risks_report()
-    
-    for risk in risks_report:
-        print(f"Name: {risk['name']}")
-        print(f"Description: {risk['description']}")
-        print(f"Probability: {risk['probability']}")
-        print(f"Impact: {risk['impact']}")
-        print(f"Priority: {risk['priority']}")
-        print(f"Business Type: {risk['business_type']}")
-        print("="*40)
+    risk_tool.identify_risks()
+    risk_tool.analyze_risks()
+    risk_tool.evaluate_risks()
+    risk_tool.develop_risk_management_strategy()
+    risk_tool.implement_and_control()
+    risk_tool.train_and_communicate()
+    risk_tool.continuous_improvement()
